@@ -25,7 +25,7 @@ Step 2: Enable redirection of TCP connections to sslcaudit
 
 When this mode is activated, all TCP connections will be routed to sslcaudit.
 
-# Additional sslcaudit features:
-# 1) determine real destination of connection and use it to distinguish between clients
-# 2) automatically fetch the certificate of the server from the real connection
-# 3) if all tests are done or it is impossible to fetch server certificate, relay traffic transparently
+Wanted sslcaudit features:
+* determine real destination of connection and use it to distinguish between clients
+* automatically fetch the certificate of the server from the real connection
+* if all tests are done or it is impossible to fetch server certificate, relay traffic transparently
