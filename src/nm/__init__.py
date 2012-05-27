@@ -7,7 +7,7 @@ import subprocess
 
 import threading
 
-OVS_CONTROLLER_URL = 'tcp:localhost:6633'
+OVS_CONTROLLER_URL = 'tcp:127.0.0.1:6633'
 
 class Iface(object):
     def __init__(self, up, loopback, carrier):
@@ -80,8 +80,8 @@ class Controller(threading.Thread):
             self.sudo(['ovs-vsctl', 'add-port', self.bridge_name, self.iface2])
             self.sudo(['ovs-vsctl', 'set-controller', self.bridge_name, OVS_CONTROLLER_URL])
 
-            self.pox = self.spawn(['env', 'PYTHONPATH=pox', 'python',
-                       'pox/pox.py', 'forwarding.l2_learning'])
+            self.pox = self.spawn(['env', 'PYTHONPATH=../pox', 'python',
+                       '../pox/pox.py', '--no-cli', 'forwarding.l2_learning'])
             self.initialized = True
         except:
             try:

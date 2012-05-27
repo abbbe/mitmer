@@ -41,12 +41,9 @@ class TestController(unittest.TestCase):
     def test_0040_empty_switch_transparent(self):
         ''' empty switch is transparent '''
         self.controller.init_mitm_switch()
+	import time
+	time.sleep(10)
         self.assert_wget('http://%s:10080/mitmer.txt' % OOB_TESTBED_HOST1, 'host2\n')
-
-    def _test_enable_mitm_tap(self):
-        self.controller.init_mitm_switch()
-        self.controller.enable_mitm_tap()
-        self.controller.disable_mitm_tap()
 
     def _test_add_metaflow(self):
         self.controller.init_mitm_switch()
@@ -62,6 +59,11 @@ class TestController(unittest.TestCase):
 
         self.controller.remove_metaflow(mf)
 
+        self.controller.disable_mitm_tap()
+
+    def _test_enable_mitm_tap(self):
+        self.controller.init_mitm_switch()
+        self.controller.enable_mitm_tap()
         self.controller.disable_mitm_tap()
 
     def assert_wget(self, url, expected_content):
