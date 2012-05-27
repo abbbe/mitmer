@@ -8,6 +8,7 @@ import re
 import subprocess
 from src.Outcome import PositiveOutcome, NegativeOutcome
 
+
 def iface_in_ifstates(iface):
     ''' This function returns True if given interface is present in the ifstate file. '''
     for ifstate_line in open('/var/run/network/ifstate'):
@@ -15,6 +16,21 @@ def iface_in_ifstates(iface):
         if iface == ifstate_iface:
             return True
     return False
+
+
+def iface_status(iface):
+    status = dict()
+    output = subprocess.check_output(['ethtool', iface])
+    for line in output.split('\n'):
+    	m = re.search('^\s+([^:]+?):\s+(\S+)\s*$', line)
+    	if m:
+		if m.group(1) == 'Speed':
+			status['speed'] = m.group(2)
+		elif m.group(1) == 'Duplex':
+			status['duplex'] = m.group(2)
+		elif m.group(1) == 'Link detected':
+			status['link_detected'] = m.group(2)
+    return status
 
 
 def iface_has_ipv6_enabled(iface):
@@ -106,8 +122,9 @@ class IfaceMitmSuitabilityCheck(object):
     def __repr__(self):
         return '<InterfaceCheck<iface=%s, res=%s>' % (self.iface, self.res)
 
-ifaces = ['wlan0', 'eth0', 'eth6']
+ifaces = ['eth5', 'eth6']
 for iface in ifaces:
+    print iface_status(iface)
     ic = IfaceMitmSuitabilityCheck(iface)
     ic.run()
     print ic
